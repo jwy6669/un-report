@@ -101,6 +101,7 @@ gapminder_data_2007<-read.csv("data/gapminder_data.csv")%>%
   select(country, pop, lifeExp, gdpPercap)
 
 
+
 inner_join(co2_emissions, gapminder_data_2007, by="country")# by Country = Country or change one of the country to another, to keep them the same.
 anti_join(co2_emissions, gapminder_data_2007, by ="country")# find rows that do not match with each other. use the first dataset as the critiera, the order matters in anti_join.
 # the join function , the column should be common, which means be existing in both dataset.
@@ -109,3 +110,15 @@ anti_join(gapminder_data_2007, co2_emissions, by ="country")
 full_join(co2_emissions, gapminder_data_2007)%>%
 View()
 
+co2_emissions%>%
+  left_join(gapminder_data_2007)
+
+# main dataframe and do not lose any data from it.
+
+co2_emissions%>%
+  right_join(gapminder_data_2007)
+
+joined_co2_pop<-inner_join(co2_emissions, gapminder_data_2007)
+
+# writing a CSV
+write.csv(joined_co2_pop, file = "data/joined_co2_pop.csv")
