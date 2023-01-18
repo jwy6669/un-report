@@ -122,3 +122,38 @@ joined_co2_pop<-inner_join(co2_emissions, gapminder_data_2007)
 
 # writing a CSV
 write.csv(joined_co2_pop, file = "data/joined_co2_pop.csv")
+
+# write back the csv file I just wrote
+co2_pop<-read.csv("data/joined_co2_pop.csv")
+
+# ggplot your data,create a histogram for both gdpPercap and lifeExp, separately, to explore the variables distributions
+ggplot(co2_pop)+
+  aes(x=gdpPercap)+
+  labs(y="country_count")+
+  geom_histogram(bins=20)+
+  theme_classic()
+
+
+ggplot(co2_pop)+
+  aes(x=lifeExp)+
+  labs(x="life expectancy",y="country_count", title = "life expectancy of countries")+
+  geom_histogram(bin=2,color="pink",fill="yellow")+
+  theme_classic()
+
+joined_co2_pop%>%
+  ggplot(aes(x=gdpPercap))+
+  geom_histogram()
+
+# showing relationships between two continuous variables  
+gdp_co2_plot<-joined_co2_pop%>%
+  ggplot(aes(x=gdpPercap,y=per_capita_emissions))+
+  geom_point()+
+  geom_smooth(method = "lm", se= FALSE)+
+  labs(x="GDP Per Capita", y="CO2 Emissions Per Capita(metric tons)", title = "Comparing Per Capita CO2 emissions to GDP Per Capita")+
+  theme_classic()+
+  ggpubr::stat_regline_equation(aes(label=after_stat(rr.label)))# adding R2, deprecate : not used in the new package, but you can use it for now. warning:not sure what i do is right for you.
+
+ggsave(gdp_co2_plot, filename="figures/gdp_vs_co2_plot.png",height=4,width = 6,units = "in",
+       dpi = 300)
+
+install.packages("ggpubr")
